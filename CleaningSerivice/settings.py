@@ -166,4 +166,5 @@ CSRF_TRUSTED_ORIGINS = [
     'https://01c8-102-176-65-85.ngrok-free.app',
     'http://localhost:3000',
     'http://localhost:8000',
+    'https://guarded-forest-28671-5818a3e4d53b.herokuapp.com',
 ]

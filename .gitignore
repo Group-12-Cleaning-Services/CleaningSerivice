@@ -30,6 +30,8 @@ media/
 *.sublime-project
 *.sublime-workspace
 *.pydevproject
+Pipefile
+Pipfile.lock
 
 # Ignore local development settings
 local_settings.py
