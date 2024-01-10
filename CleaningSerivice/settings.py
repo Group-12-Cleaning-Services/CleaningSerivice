@@ -16,6 +16,8 @@ load_dotenv()  # take environment variables from .env.
 from pathlib import Path
 import os
 from datetime import datetime, timedelta
+import django_heroku
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -156,7 +158,6 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS")
-import django_heroku
 django_heroku.settings(locals())
 
 
