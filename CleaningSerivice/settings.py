@@ -163,4 +163,5 @@ CSRF_TRUSTED_ORIGINS = [
     'https://01c8-102-176-65-85.ngrok-free.app',
     'http://localhost:3000',
     'http://localhost:8000',
+    'https://cleaningservice.onrender.com',
 ]
