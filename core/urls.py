@@ -32,7 +32,7 @@ urlpatterns = [
     path('service/all/', ServiceViewset.as_view({'get': 'list_service'})),
     path('service/create/', ServiceViewset.as_view({'post': 'create_service'})),
     path('service/update/<uuid:id>/', ServiceViewset.as_view({'post': 'update_service'})),
-    path('service/delete/<uuid:id>/', ServiceViewset.as_view({'post': 'delete_service'})),
+    path('service/delete/<uuid:id>/', ServiceViewset.as_view({'delete': 'delete_service'})),
     path('service/retrieve/<uuid:id>/', ServiceViewset.as_view({'get': 'retrieve'})),
     path('service/book/', PaymentViewset.as_view({'post': 'initialize_transaction'})),
     path('service/verify-payment/', PaymentViewset.as_view({'post': 'verify_transaction'})),
