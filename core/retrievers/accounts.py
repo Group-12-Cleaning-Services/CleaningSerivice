@@ -3,8 +3,9 @@ from core.serializers import CleaningServiceSerializer, VerificationTokenSeriali
 from core.senders.profile import *
 
 
-def get_user_information(user):
+def get_user_information(email):
     """Get user information"""
+    user = get_user_by_email(email)
     profile = get_profile_by_user_id(user.user_id)
     if profile:
         user_data = {
@@ -12,7 +13,7 @@ def get_user_information(user):
             "email": user.email,
             "user_type": user.user_type,
             "verified": user.verified,
-            "profile": send_profile_information(profile)
+            "profile": send_profile_information(user.profile)
         }
         return user_data
     else:

@@ -132,7 +132,7 @@ class SignIn(viewsets.ViewSet):
 
         if user.check_password(password) and user.is_active:
             token = RefreshToken.for_user(user)
-            user_data = get_user_information(user)
+            user_data = get_user_information(email)
             context = {
                 "detail": "Sign in successful",
                 "user": user_data,
