@@ -72,6 +72,7 @@ class CleaningServiceUser(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     verified = models.BooleanField(default=False)
+    organization_name = models.CharField(max_length=255, null=True, blank=True)
     USERNAME_FIELD = 'email'
     objects = CleaningServiceBaseUser()
     
@@ -113,18 +114,18 @@ class Service(models.Model):
     user = models.ForeignKey(CleaningServiceUser, on_delete=models.CASCADE)
     thumnail = models.ImageField(upload_to="thumnail_images", blank=True, null=True)
     price = models.DecimalField(decimal_places=2, max_digits=10)
-    create_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return f"{self.title} - {self.category} || {self.user.email} at {self.price}"
     
 
-class ServiceProvider(models.Model):
-    serviceprovider_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.OneToOneField(CleaningServiceUser, on_delete=models.CASCADE, related_name='service_provider')
-    thumnails = models.ImageField(upload_to="service_provider_thumnails", blank=True, null=True)
-    service = models.ManyToManyField(Service, related_name='service')
-    def __str__(self):
-        return f"{self.user.email} - {self.service.count()}"
+# class ServiceProvider(models.Model):
+#     serviceprovider_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+#     user = models.OneToOneField(CleaningServiceUser, on_delete=models.CASCADE, related_name='service_provider')
+#     thumnails = models.ImageField(upload_to="service_provider_thumnails", blank=True, null=True)
+#     service = models.ManyToManyField(Service, related_name='service')
+#     def __str__(self):
+#         return f"{self.user.email} - {self.service.count()}"
     
 
 class ScheduleService(models.Model):
@@ -159,8 +160,8 @@ class Notification(models.Model):
 
 
 class Transaction(models.Model):
-    user = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
+    user = models.ForeignKey(CleaningServiceUser, on_delete=models.CASCADE)
     Balance = models.DecimalField(max_digits=5, decimal_places=2)
     
     def __str__(self):
-        return f"{self.user.user.email} - {self.amount}"
+        return f"{self.user.email} - {self.amount}"
