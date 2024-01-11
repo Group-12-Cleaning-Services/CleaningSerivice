@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 import pytz
 UTC = pytz.UTC
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from core.serializers import CleaningServiceSerializer
 class AccountViewset(viewsets.ViewSet):
     """Accounts viewset"""
 
@@ -27,7 +27,8 @@ class AccountViewset(viewsets.ViewSet):
         user = create_user(email, password)
         user.user_type = account_type
         user.save()
-        context = {"detail": "User created successfully", "user": get_user_information(user)}
+        user_data = CleaningServiceSerializer(user).data
+        context = {"detail": "User created successfully", "user": user_data}
         thread = threading.Thread(target=email_verification, args=[email, 4])
         thread.start()
         return Response(context, status=status.HTTP_201_CREATED)
