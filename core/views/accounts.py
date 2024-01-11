@@ -8,7 +8,7 @@ from core.utils import email_verification, verification_confirmation_email
 from datetime import datetime, timedelta
 import pytz
 UTC = pytz.UTC
-
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class AccountViewset(viewsets.ViewSet):
     """Accounts viewset"""
@@ -101,3 +101,43 @@ class AccountViewset(viewsets.ViewSet):
 
         context = {"detail": "The otp you have provided is invalid"}
         return Response(context, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SignIn(viewsets.ViewSet):
+    
+    def post(self, request):
+        """Sign in user with email and password
+        
+
+        Args:
+            request (http): http request
+
+        Raises:
+            AuthenticationFailed: If user does not exist or password is incorrect
+        Returns:
+            http response: http response
+        """
+        email = request.data.get("email")
+        password = request.data.get("password")
+
+        if not email or not password:
+            raise AuthenticationFailed("Missing required login credential")
+
+        user = get_user_by_email(email)
+
+        if not user:
+            context = {"error": "User not found"}
+            return Response(context, status=status.HTTP_404_NOT_FOUND)
+
+        if user.check_password(password) and user.is_active:
+            token = RefreshToken.for_user(user)
+            user_data = get_user_information(user)
+            context = {
+                "detail": "Sign in successful",
+                "user": user_data,
+                "token": {"access": str(token.access_token), "refresh": str(token)},
+            }
+            response = Response(context, status=status.HTTP_200_OK)
+            return response
+        else:
+            raise AuthenticationFailed("Incorrect login credentials provided")

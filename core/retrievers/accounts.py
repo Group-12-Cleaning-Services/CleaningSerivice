@@ -1,13 +1,31 @@
 from core.models import CleaningServiceUser, VerificationToken, PasswordToken, CleaningServiceUserProfile
 from core.serializers import CleaningServiceSerializer, VerificationTokenSerializer, PasswordTokenSerializer
+from core.senders.profile import *
 
 
-def get_user_information(email):
+def get_user_information(user):
     """Get user information"""
-    user = get_user_by_email(email)
-    serializer = CleaningServiceSerializer(user)
-    return serializer.data
-
+    profile = get_profile_by_user_id(user.user_id)
+    if profile:
+        user_data = {
+            "user_id": user.user_id,
+            "email": user.email,
+            "user_type": user.user_type,
+            "verified": user.verified,
+            "profile": send_profile_information(profile)
+        }
+        return user_data
+    else:
+        user_data = {
+            "user_id": user.user_id,
+            "email": user.email,
+            "user_type": user.user_type,
+            "verified": user.verified,
+            "profile": ""
+        }
+        return user_data
+            
+            
 def get_user_by_email(email):
     """Get user by email"""
     try:
@@ -41,7 +59,6 @@ def get_profile_by_user_id(user_id):
     """Get profile by user id"""
     try:
         user = get_user_by_id(user_id)
-        print(f"user profile {user.email}")
         return CleaningServiceUserProfile.objects.get(profile_id=user.profile.profile_id)
     except CleaningServiceUser.DoesNotExist:
         return None

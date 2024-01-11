@@ -1,5 +1,5 @@
 from django.urls import path
-from core.views.accounts import AccountViewset
+from core.views.accounts import AccountViewset, SignIn
 from core.views.profile import ProfileViewset
 from core.views.services import ServiceViewset
 from core.views.notification import NotificationViewset
@@ -23,7 +23,7 @@ urlpatterns = [
     path('profile/update/', ProfileViewset.as_view({'post': 'update'})),
     path('profile/retrieve/', ProfileViewset.as_view({'get': 'retrieve'})),
     #login
-    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('login/', SignIn.as_view({'post':'post'}), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     #password reset
     path('accounts/password-reset/', PasswordResetViewset.as_view({'post': 'password_reset_request'})),
