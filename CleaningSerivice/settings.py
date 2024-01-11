@@ -95,14 +95,26 @@ WSGI_APPLICATION = "CleaningSerivice.wsgi.application"
 # }
 
 
+# DATABASES = {
+#     "default": dj_database_url.config(
+#         default="postgres://vfiuvmohqbfcxz:dc6274522e6701995ad2ec6ed3ffe8a441b62c4842d710bda153a0b51f53c280@ec2-3-232-218-211.compute-1.amazonaws.com:5432/dc65d5s8f22cpa",
+#         conn_max_age=600,
+#         conn_health_checks=True,
+#         ssl_require=True,
+#     ),
+# }
+
 DATABASES = {
-    "default": dj_database_url.config(
-        default="postgres://vfiuvmohqbfcxz:dc6274522e6701995ad2ec6ed3ffe8a441b62c4842d710bda153a0b51f53c280@ec2-3-232-218-211.compute-1.amazonaws.com:5432/dc65d5s8f22cpa",
-        conn_max_age=600,
-        conn_health_checks=True,
-        ssl_require=True,
-    ),
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'dc65d5s8f22cpa',
+        'USER': 'vfiuvmohqbfcxz',
+        'PASSWORD':'dc6274522e6701995ad2ec6ed3ffe8a441b62c4842d710bda153a0b51f53c280',
+        'HOST': 'ec2-3-232-218-211.compute-1.amazonaws.com',
+        'PORT': '5432',
+    }
 }
+
 
 
 # Password validation
