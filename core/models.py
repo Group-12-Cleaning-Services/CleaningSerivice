@@ -114,7 +114,7 @@ class Service(models.Model):
     user = models.ForeignKey(CleaningServiceUser, on_delete=models.CASCADE)
     thumnail = models.ImageField(upload_to="thumnail_images", blank=True, null=True)
     price = models.DecimalField(decimal_places=2, max_digits=10)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateField(auto_now_add=True)
     def __str__(self):
         return f"{self.title} - {self.category} || {self.user.email} at {self.price}"
     
@@ -161,7 +161,7 @@ class Notification(models.Model):
 
 class Transaction(models.Model):
     user = models.ForeignKey(CleaningServiceUser, on_delete=models.CASCADE)
-    Balance = models.DecimalField(max_digits=5, decimal_places=2)
+    balance = models.DecimalField(max_digits=5, decimal_places=2)
     
     def __str__(self):
         return f"{self.user.email} - {self.amount}"

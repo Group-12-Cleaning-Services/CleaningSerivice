@@ -1,4 +1,5 @@
 from core.models import *
+from core.serializers import ServiceSerializer
 
 def get_service_by_id(id: uuid) -> Service:
     """Get service by id
@@ -19,7 +20,8 @@ def get_all_service() -> Service:
         Return all serice in the db
     """
     query_set = Service.objects.all()
-    return query_set
+    serializer = ServiceSerializer(query_set, many=True)
+    return serializer.data
 
 
 def get_service_of_provider(user: CleaningServiceUser) -> Service:

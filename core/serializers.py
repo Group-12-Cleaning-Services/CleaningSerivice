@@ -1,11 +1,20 @@
 from core.models import *
 from rest_framework import serializers
 
+
+
+class CleaningServiceUserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CleaningServiceUserProfile
+        fields = ['first_name', 'last_name', 'contact', 'profile_image', 'time_created']
+
+
 class CleaningServiceSerializer(serializers.ModelSerializer):
+    profile = CleaningServiceUserProfileSerializer()
     class Meta:
         model = CleaningServiceUser
-        fields = ( 'email', 'password', 'user_type', 'profile')
-        extra_kwargs = {'password': {'write_only': True}, 'is_active': {'read_only': True}, 'is_staff': {'read_only': True}, 'is_superuser': {'read_only': True},}
+        fields = ['email', 'user_type', 'profile']
+        # extra_kwargs = {'password': {'write_only': True}, 'is_active': {'read_only': True}, 'is_staff': {'read_only': True}, 'is_superuser': {'read_only': True},}
         
         
         
@@ -19,21 +28,15 @@ class PasswordTokenSerializer(serializers.ModelSerializer):
         fields = "__all__"
         
 
-class CleaningServiceUserProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CleaningServiceUserProfile
-        fields = "__all__"
-        extra_kwargs = {'user': {'read_only': True}}
-
 
 class ServiceSerializer(serializers.ModelSerializer):
     
-    user = CleaningServiceSerializer
+    user = CleaningServiceSerializer()
     class Meta:
         model = Service
-        fields = "__all__"
-        extra_kwargs = {'service_id': {'read_only': True},
-        'user': {'read_only': True}}
+        fields = ['service_id', 'user', 'title', 'description', 'price', 'thumnail', 'created_at']
+        # extra_kwargs = {'service_id': {'read_only': True},
+        # 'user': {'read_only': True}}
         
 class ScheduleServiceSerializer(serializers.ModelSerializer):
     """Schedule Service Serializer

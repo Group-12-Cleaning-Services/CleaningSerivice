@@ -52,6 +52,7 @@ class PaymentViewset(viewsets.ViewSet):
             }
             return Response(context, status=status.HTTP_400_BAD_REQUEST)
         email = user.email 
+        print()
         service = get_service_by_id(service_id)
         if service:
             data = {
@@ -199,7 +200,7 @@ class PaymentViewset(viewsets.ViewSet):
             if response["data"]["status"] == "success":
                 service = get_service_by_id(service_id)
                 schedule_service = book_service(service=service, user=user, time=time)
-                Transaction.objects.create(user=user, amount=service.price)
+                Transaction.objects.create(user=user, balance=service.price)
                 context = {
                     "detail": "Service booked successfully",
                     "data": schedule_service

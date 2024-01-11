@@ -20,7 +20,7 @@ class ServiceViewset(viewsets.ViewSet):
         """
         context = {
             "detail": "All Services",
-            "serices": send_all_services()
+            "services": send_all_services()
         }
         return Response(context, status=status.HTTP_200_OK)
     
