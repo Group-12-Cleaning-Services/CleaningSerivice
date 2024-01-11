@@ -31,12 +31,11 @@ class PasswordTokenSerializer(serializers.ModelSerializer):
 
 class ServiceSerializer(serializers.ModelSerializer):
     
-    user = CleaningServiceSerializer()
+    user = CleaningServiceSerializer(read_only=True)
     class Meta:
         model = Service
         fields = ['service_id', 'user', 'title', 'description', 'price', 'thumnail', 'created_at']
-        # extra_kwargs = {'service_id': {'read_only': True},
-        # 'user': {'read_only': True}}
+        extra_kwargs = {'service_id': {'read_only': True}}
         
 class ScheduleServiceSerializer(serializers.ModelSerializer):
     """Schedule Service Serializer
