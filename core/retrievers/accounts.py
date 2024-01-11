@@ -6,8 +6,8 @@ from core.senders.profile import *
 def get_user_information(email):
     """Get user information"""
     user = get_user_by_email(email)
-    profile = get_profile_by_user_id(user.user_id)
-    if profile:
+    if user.profile:
+        profile = get_profile_by_user_id(user.user_id)
         user_data = {
             "user_id": user.user_id,
             "email": user.email,
