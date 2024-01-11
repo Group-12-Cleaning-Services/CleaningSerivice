@@ -39,7 +39,7 @@ class PaymentViewset(viewsets.ViewSet):
             }
             }
         """
-        SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY")
+        SECRET_KEY = os.environ.get("PAYSTACK_SECRET_KEY")
         service_id = request.data.get('service_id')
         user = get_user_from_jwttoken(request)
         time = request.data.get('time')
@@ -163,7 +163,7 @@ class PaymentViewset(viewsets.ViewSet):
             }
 
         """
-        SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY")
+        SECRET_KEY = os.environ.get("PAYSTACK_SECRET_KEY")
         user = get_user_from_jwttoken(request)
         service_id = request.data.get('service_id')
         time = request.data.get('time')
