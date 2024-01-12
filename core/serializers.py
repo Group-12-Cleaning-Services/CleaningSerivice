@@ -6,7 +6,7 @@ from rest_framework import serializers
 class CleaningServiceUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CleaningServiceUserProfile
-        fields = ['first_name', 'last_name', 'contact', 'profile_image', 'time_created']
+        fields = ['profile_id', 'first_name', 'last_name', 'contact', 'profile_image', 'time_created']
 
 
 class CleaningServiceSerializer(serializers.ModelSerializer):
