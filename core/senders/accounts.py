@@ -21,7 +21,14 @@ def create_user(email, password):
 #     else:
 #         return serializer.error
 
+def get_all_service_providers()-> CleaningServiceUser:
+    """Get all service providers"""
+    query_set = CleaningServiceUser.objects.filter(user_type='service_provider')
+    serializer = CleaningServiceSerializer(query_set, many=True)
+    return serializer.data
 
+    
+    
 def generate_token(otp_length):
     """Generate token"""
     return ''.join([random.choice(string.ascii_uppercase + string.digits)] for _ in range(otp_length))

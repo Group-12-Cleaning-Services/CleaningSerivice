@@ -12,6 +12,7 @@ def get_user_information(email):
             "user_id": user.user_id,
             "email": user.email,
             "user_type": user.user_type,
+            "organization_name": user.organization_name if user.user_type == "service_provider" else "",
             "verified": user.verified,
             "profile": send_profile_information(user.profile)
         }
@@ -22,7 +23,9 @@ def get_user_information(email):
             "email": user.email,
             "user_type": user.user_type,
             "verified": user.verified,
-            "profile": ""
+            "profile": "",
+            "organization_name": user.organization_name if user.user_type == "service_provider" else "",
+
         }
         return user_data
             

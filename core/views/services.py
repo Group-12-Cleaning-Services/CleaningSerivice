@@ -1,6 +1,8 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from core.senders.services import *
+from core.senders.accounts import *
+from core.retrievers.accounts import *
 from core.retrievers.services import *
 from core.utils import get_user_from_jwttoken
 from rest_framework.permissions import IsAuthenticated
@@ -11,6 +13,17 @@ class ServiceViewset(viewsets.ViewSet):
     Args:
         viewsets (viewset): viewset class
     """
+    def list_service_providers(self, request):
+        """View for getting all service providers
+
+        Args:
+            request (http): get request
+        """
+        context = {
+            "detail": "All Service Providers",
+            "service_providers": get_all_service_providers()
+        }
+        return Response(context, status=status.HTTP_200_OK)
     
     def list_service(self, request):
         """View for getting all service objects
@@ -75,14 +88,14 @@ class ServiceViewset(viewsets.ViewSet):
         }
         return Response(context, status=status.HTTP_200_OK)
     
-    def get_service_provider_services(self, request):
+    def get_service_provider_services(self, request, id):
         """Get the services of a service provider
 
         Args:
             request (http): get request
             id (uuid): service provider id
         """
-        user = get_user_from_jwttoken(request)
+        user = get_user_by_id(id)
         if not user:
             context = {
                 "detail": "User not found"

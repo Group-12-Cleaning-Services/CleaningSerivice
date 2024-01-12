@@ -30,6 +30,7 @@ urlpatterns = [
     path('accounts/password-reset-confirm/', PasswordResetViewset.as_view({'post': 'password_reset_confirm'})),
     #service
     path('service/all/', ServiceViewset.as_view({'get': 'list_service'})),
+    path('service/providers/', ServiceViewset.as_view({'get': 'list_service_providers'})),
     path('service/create/', ServiceViewset.as_view({'post': 'create_service'})),
     path('service/update/<uuid:id>/', ServiceViewset.as_view({'post': 'update_service'})),
     path('service/delete/<uuid:id>/', ServiceViewset.as_view({'delete': 'delete_service'})),
@@ -38,7 +39,7 @@ urlpatterns = [
     path('service/verify-payment/', PaymentViewset.as_view({'post': 'verify_transaction'})),
     path('service/booked-user-service/<uuid:id>/', ServiceViewset.as_view({'get': 'list_booked_service_by_customer'})),
     path('service/service-feedback/<uuid:id>/', ServiceViewset.as_view({'post': 'service_feedback'})),
-    path('service/provider-services/', ServiceViewset.as_view({'get':'get_service_provider_services'})),
+    path('service/provider-services/<uuid:id>/', ServiceViewset.as_view({'get':'get_service_provider_services'})),
     ##Notification
     path('notification/all/', NotificationViewset.as_view({'get': 'list'})),
 
