@@ -119,6 +119,38 @@ class ServiceViewset(viewsets.ViewSet):
         }
         return Response(context, status=status.HTTP_200_OK)
     
+    
+    def list_service_provider_services(self, request):
+        """Get the services of a service provider
+
+        Args:
+            request (http): get request
+            id (uuid): service provider id
+        """
+        user = get_user_from_jwttoken(request)
+        if not user:
+            context = {
+                "detail": "User not found"
+            }
+            return Response(context, status=status.HTTP_404_NOT_FOUND)
+        if user.user_type != "service_provider":
+            context = {
+                "detail": "You are not a service provider"
+            }
+            return Response(context, status=status.HTTP_403_FORBIDDEN)
+        
+        services = get_serivce_by_user(user)
+        if not services:
+            context = {
+                "detail": "Service provider not found"
+            }
+            return Response(context, status=status.HTTP_200_OK)
+        context = {
+            "detail": "Service provider services",
+            "services": services
+        }
+        return Response(context, status=status.HTTP_200_OK)
+    
     def create_service(self, request):
         """Create Service
 
