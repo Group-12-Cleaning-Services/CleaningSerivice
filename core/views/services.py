@@ -21,7 +21,7 @@ class ServiceViewset(viewsets.ViewSet):
         """
         context = {
             "detail": "All Service Providers",
-            "service_providers": get_all_service_providers()
+            "data": get_all_service_providers()
         }
         return Response(context, status=status.HTTP_200_OK)
     

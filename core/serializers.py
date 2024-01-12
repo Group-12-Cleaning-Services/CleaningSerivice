@@ -13,7 +13,7 @@ class CleaningServiceSerializer(serializers.ModelSerializer):
     profile = CleaningServiceUserProfileSerializer()
     class Meta:
         model = CleaningServiceUser
-        fields = ['email', 'user_type','organization_name', 'profile']
+        fields = ['user_id', 'email', 'user_type','organization_name', 'profile']
         # extra_kwargs = {'password': {'write_only': True}, 'is_active': {'read_only': True}, 'is_staff': {'read_only': True}, 'is_superuser': {'read_only': True},}
         
         
