@@ -161,7 +161,7 @@ class Notification(models.Model):
 
 class Transaction(models.Model):
     user = models.ForeignKey(CleaningServiceUser, on_delete=models.CASCADE)
-    balance = models.DecimalField(max_digits=5, decimal_places=2)
+    balance = models.DecimalField(max_digits=10, decimal_places=2)
     
     def __str__(self):
-        return f"{self.user.email} - {self.amount}"
+        return f"{self.user.email} - {self.balance}"

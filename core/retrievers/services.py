@@ -14,6 +14,19 @@ def get_service_by_id(id: uuid) -> Service:
     except Service.DoesNotExist:
         return None
     
+def get_serivce_by_user(user: CleaningServiceUser) -> Service:
+    """Get service by user
+
+    Args:
+        user (CleaningServiceUser): CleaningServiceUser instance
+        Return: A service is it exists else it return none
+    """
+    try:
+        query = Service.objects.filter(user=user)
+        return ServiceSerializer(query, many=True).data
+    except Service.DoesNotExist:
+        return None
+    
     
 def get_all_service() -> Service:
     """Get all services
@@ -24,12 +37,12 @@ def get_all_service() -> Service:
     return serializer.data
 
 
-def get_service_of_provider(user: CleaningServiceUser) -> Service:
-    try:
-        query_set = Service.objects.filter(user=user)
-        return query_set
-    except Service.DoesNotExist:
-        return None
+# def get_service_of_provider(user: CleaningServiceUser) -> Service:
+#     try:
+#         query_set = Service.objects.filter(user=user)
+#         return query_set
+#     except Service.DoesNotExist:
+#         return None
     
     
 def get_service_by_category(category: str) -> Service:

@@ -10,6 +10,8 @@ import requests
 from core.utils import *
 import json
 import os
+import threading
+import time
 
 
 class PaymentViewset(viewsets.ViewSet):
@@ -20,7 +22,7 @@ class PaymentViewset(viewsets.ViewSet):
         SECRET_KEY = os.environ.get("PAYSTACK_SECRET_KEY")
         service_id = request.data.get('service_id')
         user = get_user_from_jwttoken(request)
-        time = request.data.get('time')
+        # service_time = request.data.get('time')
 
         url="https://api.paystack.co/transaction/initialize"
         
@@ -30,7 +32,6 @@ class PaymentViewset(viewsets.ViewSet):
             }
             return Response(context, status=status.HTTP_400_BAD_REQUEST)
         email = user.email 
-        print()
         service = get_service_by_id(service_id)
         if service:
             data = {
@@ -45,7 +46,7 @@ class PaymentViewset(viewsets.ViewSet):
             response = requests.post(url, headers=headers, json=data)
             if response.status_code == 200:
                 data = response.json()
-                return Response(data, status=response.status_code)
+                return Response(data=data, status=status.HTTP_200_OK)
             else:
                 return Response(response.text, status=response.status_code)
         return Response({"error": "service not found"}, status=status.HTTP_404_NOT_FOUND)
