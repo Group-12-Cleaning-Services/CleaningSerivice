@@ -41,6 +41,7 @@ urlpatterns = [
     path('service/service-feedback/<uuid:id>/', ServiceViewset.as_view({'post': 'service_feedback'})),
     path('service/provider-services/<uuid:id>/', ServiceViewset.as_view({'get':'get_service_provider_services'})),
     path('service/list-provider-services/', ServiceViewset.as_view({'get':'list_service_provider_services'})),
+    path('service/list-service-provider-booked-services/', ServiceViewset.as_view({'get':'list_booked_service_of_provider'})),
     ##Notification
     path('notification/all/', NotificationViewset.as_view({'get': 'list'})),
 

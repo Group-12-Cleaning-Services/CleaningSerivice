@@ -56,7 +56,7 @@ class ServiceViewset(viewsets.ViewSet):
         }
         return Response(context, status=status.HTTP_200_OK)
     
-    def list_booked_service_by_provider(self, request, id):
+    def list_booked_service_of_provider(self, request):
         """View for getting all booked service by a provider
 
         Args:
