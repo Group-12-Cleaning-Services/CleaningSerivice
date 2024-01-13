@@ -70,7 +70,7 @@ class ServiceViewset(viewsets.ViewSet):
             return Response(context, status=status.HTTP_403_FORBIDDEN)
         context = {
             "detail": "All booked service by a provider",
-            "serices": send_booked_service_by_provider(user)
+            "data": send_booked_service_by_provider(user)
         }
         return Response(context, status=status.HTTP_200_OK)
     
