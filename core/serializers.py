@@ -34,7 +34,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     user = CleaningServiceSerializer(read_only=True)
     class Meta:
         model = Service
-        fields = ['service_id', 'user', 'title', 'description', 'price', 'thumnail', 'created_at']
+        fields = ['service_id', 'user', 'title', 'description', 'price', 'category', 'thumnail', 'created_at']
         extra_kwargs = {'service_id': {'read_only': True}}
         
 class ScheduleServiceSerializer(serializers.ModelSerializer):
