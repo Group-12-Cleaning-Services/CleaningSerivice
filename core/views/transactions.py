@@ -58,12 +58,11 @@ class PaymentViewset(viewsets.ViewSet):
         
         time.sleep(120)
         SECRET_KEY = os.environ.get("PAYSTACK_SECRET_KEY")
-        user = get_user_from_jwttoken(request)
         service_id = request.data.get('service_id')
         service_time = request.data.get('time')
         address = request.data.get('address')
-        date = request.data.get('date')
-
+        date = request.data.get('date')[0:10]
+        
 
         if not user or not service_id:
             context = {
