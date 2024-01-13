@@ -73,6 +73,7 @@ class CleaningServiceUser(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     verified = models.BooleanField(default=False)
     organization_name = models.CharField(max_length=255, null=True, blank=True)
+    organization_logo = models.ImageField(upload_to='organization_logo', blank=True, null=True)
     USERNAME_FIELD = 'email'
     objects = CleaningServiceBaseUser()
     
