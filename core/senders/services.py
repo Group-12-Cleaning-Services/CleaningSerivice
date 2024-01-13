@@ -62,8 +62,7 @@ def book_service(service: Service, user: CleaningServiceUser, time: str, address
         data (str): post data with required fields
     """
     service = ScheduleService.objects.create(service=service, customer=user, time=time, address=address, date=date)
-    serializer = ScheduleServiceSerializer(service)
-    return serializer.data
+    return service
     
     
 def send_all_booked_service() -> dict:

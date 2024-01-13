@@ -25,6 +25,8 @@ class PaymentViewset(viewsets.ViewSet):
         # service_time = request.data.get('time')
 
         url="https://api.paystack.co/transaction/initialize"
+        print(user)
+        print(service_id)
         
         if user is None or service_id is None:
             context = {
@@ -62,23 +64,8 @@ class PaymentViewset(viewsets.ViewSet):
         service_time = request.data.get('time')
         address = request.data.get('address')
         date = request.data.get('date')[0:10]
-        
+        user = get_user_from_jwttoken(request)
 
-        if not user or not service_id:
-            context = {
-                "error": "user and service id is required"
-            }
-            return Response(context, status=status.HTTP_400_BAD_REQUEST)
-        if not user:
-            context = {
-                "error": "user is required"
-            }
-            return Response(context, status=status.HTTP_400_BAD_REQUEST)
-        if not reference:
-            context = {
-                "error": "reference is required"
-            }
-            return Response(context, status=status.HTTP_400_BAD_REQUEST)
         url = f"https://api.paystack.co/transaction/verify/{reference}"
         
         headers = {
@@ -93,6 +80,7 @@ class PaymentViewset(viewsets.ViewSet):
             if response["data"]["status"] == "success":
                 service = get_service_by_id(service_id)
                 schedule_service = book_service(service=service, user=user, time=service_time, address=address, date=date)
+                print(schedule_service if schedule_service else "not booked")
                 Transaction.objects.create(user=user, balance=service.price)
                 context = {
                     "detail": "Service booked successfully",
