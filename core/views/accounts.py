@@ -19,6 +19,8 @@ class AccountViewset(viewsets.ViewSet):
         password = request.data.get('password')
         account_type = request.data.get('user_type')
         user = get_user_by_email(email)
+        organization_name = request.data.get('organization_name')
+        organization_logo = request.data.get('organization_logo')
         if user:
             context = {
                 'detail': 'User already exists'
@@ -26,6 +28,8 @@ class AccountViewset(viewsets.ViewSet):
             return Response(context, status=status.HTTP_208_ALREADY_REPORTED)
         user = create_user(email, password)
         user.user_type = account_type
+        user.organization_name = organization_name
+        user.organization_logo = organization_logo
         user.save()
         user_data = CleaningServiceSerializer(user).data
         context = {"detail": "User created successfully", "user": user_data}
