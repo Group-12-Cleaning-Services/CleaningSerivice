@@ -134,6 +134,7 @@ class ScheduleService(models.Model):
     time = models.DateTimeField()
     customer = models.ForeignKey(CleaningServiceUser, on_delete=models.CASCADE)
     status = models.CharField(choices=SCHEDULE_STATUS, max_length=50, default="booked", null=True, blank=True)
+    address = models.CharField(max_length=50)
     
     def __str__(self):
         return f"{self.service.title} is booked by - {self.customer.email} at {self.time}"

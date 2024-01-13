@@ -46,20 +46,22 @@ class PaymentViewset(viewsets.ViewSet):
             response = requests.post(url, headers=headers, json=data)
             if response.status_code == 200:
                 data = response.json()
+                verify_thread = threading.Thread(target=self.verify_transaction, args=[request, data["data"]["reference"]])
+                verify_thread.start()
                 return Response(data=data, status=status.HTTP_200_OK)
             else:
                 return Response(response.text, status=response.status_code)
         return Response({"error": "service not found"}, status=status.HTTP_404_NOT_FOUND)
             
     
-    def verify_transaction(self, request)-> Response:
+    def verify_transaction(self, request ,reference)-> Response:
         
-        
+        time.sleep(120)
         SECRET_KEY = os.environ.get("PAYSTACK_SECRET_KEY")
         user = get_user_from_jwttoken(request)
         service_id = request.data.get('service_id')
-        time = request.data.get('time')
-        reference = request.data.get('reference')
+        service_time = request.data.get('time')
+        address = request.data.get('address')
 
 
         if not user or not service_id:
@@ -90,7 +92,7 @@ class PaymentViewset(viewsets.ViewSet):
             response = response.json()
             if response["data"]["status"] == "success":
                 service = get_service_by_id(service_id)
-                schedule_service = book_service(service=service, user=user, time=time)
+                schedule_service = book_service(service=service, user=user, time=service_time, address=address)
                 Transaction.objects.create(user=user, balance=service.price)
                 context = {
                     "detail": "Service booked successfully",
