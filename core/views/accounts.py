@@ -76,6 +76,7 @@ class AccountViewset(viewsets.ViewSet):
             context = {"detail": "No account associated with this email"}
             return Response(context, status=status.HTTP_404_NOT_FOUND)
         if account.verified:
+            print(account.verified)
             context = {"detail": "Your account has already been verified"}
             return Response(context, status=status.HTTP_208_ALREADY_REPORTED)
 
@@ -102,7 +103,7 @@ class AccountViewset(viewsets.ViewSet):
         else:
             otp_detail.delete()
             context = {"detail": "This otp has expired Request a new one"}
-            return Response(context, status=status.HTTP_400_BAD_REQUEST)
+            return Response(context, status=status.HTTP_200_OK)
 
         context = {"detail": "The otp you have provided is invalid"}
         return Response(context, status=status.HTTP_400_BAD_REQUEST)
