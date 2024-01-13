@@ -131,7 +131,8 @@ class Service(models.Model):
 class ScheduleService(models.Model):
     scheduleservice_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
-    time = models.DateTimeField()
+    date = models.DateField(auto_now=False, auto_now_add=False, blank=True, null=True)
+    time = models.TimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
     customer = models.ForeignKey(CleaningServiceUser, on_delete=models.CASCADE)
     status = models.CharField(choices=SCHEDULE_STATUS, max_length=50, default="booked", null=True, blank=True)
     address = models.CharField(max_length=50)

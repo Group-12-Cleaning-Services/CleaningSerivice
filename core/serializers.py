@@ -47,7 +47,7 @@ class ScheduleServiceSerializer(serializers.ModelSerializer):
     customer = CleaningServiceSerializer(many=False, read_only=True)
     class Meta:
         model = ScheduleService
-        fields = "service", "customer", "time", "status"
+        fields = "service", "customer", 'date', "time", "status"
 
 
 class ServiceFeedbackSerialiazer(serializers.ModelSerializer):

@@ -62,6 +62,7 @@ class PaymentViewset(viewsets.ViewSet):
         service_id = request.data.get('service_id')
         service_time = request.data.get('time')
         address = request.data.get('address')
+        date = request.data.get('date')
 
 
         if not user or not service_id:
@@ -92,7 +93,7 @@ class PaymentViewset(viewsets.ViewSet):
             response = response.json()
             if response["data"]["status"] == "success":
                 service = get_service_by_id(service_id)
-                schedule_service = book_service(service=service, user=user, time=service_time, address=address)
+                schedule_service = book_service(service=service, user=user, time=service_time, address=address, date=date)
                 Transaction.objects.create(user=user, balance=service.price)
                 context = {
                     "detail": "Service booked successfully",
