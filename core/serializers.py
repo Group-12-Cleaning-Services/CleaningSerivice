@@ -64,3 +64,11 @@ class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields =   "__all__"
+        
+
+class TransactionSerializer(serializers.ModelSerializer):
+    """Transaction Serializer"""
+
+    class Meta:
+        model = Transaction
+        fields = "__all__"

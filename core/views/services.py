@@ -344,3 +344,29 @@ class ServiceViewset(viewsets.ViewSet):
             permission_classes = []
         return [permission() for permission in permission_classes]
     
+
+    def update_booked_service(self, request, id):
+        """Update Booked Service
+
+        Args:
+            request (http): put request
+            id (uuid): service id
+        """
+        user = get_user_from_jwttoken(request)
+        if user.user_type != "service_provider":
+            context = {
+                "detail": "You are not a provider"
+            }
+            return Response(context, status=status.HTTP_403_FORBIDDEN)
+        schedule_service = get_booked_service_by_id(id)
+        if not schedule_service:
+            context = {
+                "detail": "Schedule service not found"
+            }
+            return Response(context, status=status.HTTP_404_NOT_FOUND)
+        schedule_service = update_booked_service_status(schedule_service, status=request.data.get("status"))
+        context = {
+            "detail": "Schedule service updated successfully",
+            "schedule_service": schedule_service
+        }
+        return Response(context, status=status.HTTP_200_OK)

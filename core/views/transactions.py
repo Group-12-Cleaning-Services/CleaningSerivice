@@ -8,6 +8,7 @@ from core.retrievers.services import *
 from core.models import Transaction
 import requests
 from core.utils import *
+from core.serializers import TransactionSerializer
 import json
 import os
 import threading
@@ -80,8 +81,12 @@ class PaymentViewset(viewsets.ViewSet):
             if response["data"]["status"] == "success":
                 service = get_service_by_id(service_id)
                 schedule_service = book_service(service=service, user=user, time=service_time, address=address, date=date)
-                print(schedule_service if schedule_service else "not booked")
                 Transaction.objects.create(user=user, balance=service.price)
+                service_transaction = Transaction.objects.get(user=service.user)
+                if service_transaction:
+                    update_provider_balance(service_transaction, service.price)
+                else:
+                    create_provider_balance(service.user, service.price)
                 context = {
                     "detail": "Service booked successfully",
                     "data": schedule_service
@@ -94,3 +99,76 @@ class PaymentViewset(viewsets.ViewSet):
                 return Response(context, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(response.text, status=response.status_code)
+        
+
+class Withdraw(viewsets.ViewSet):
+    
+    permission_classes = [IsAuthenticated]
+    
+    def initialize_transfer(self, request):
+        """curl https://api.paystack.co/transfer
+            -H "Authorization: Bearer YOUR_SECRET_KEY"
+            -H "Content-Type: application/json"
+            -d '{ "source": "balance", 
+                "amount": "37800",
+                "reference": "your-unique-reference", 
+                "recipient": "RCP_t0ya41mp35flk40", 
+                "reason": "Holiday Flexing" 
+                }'
+            -X POST
+    """
+        amount = request.data.get("amount")
+        user = get_user_from_jwttoken(request)
+        url = "https://api.paystack.co/transfer"
+        SECRET_KEY = os.environ.get("PAYSTACK_SECRET_KEY")
+        if user is None or amount is None:
+            context = {
+                "error": "user and amount is required"
+            }
+            return Response(context, status=status.HTTP_204_NO_CONTENT)
+        headers = {
+            "Authorization": f"Bearer {SECRET_KEY}",
+            "Content-Type": "application/json"
+        }
+        transaction = Transaction.objects.get(user=user)
+        if transaction:
+            if transaction.balance < amount:
+                context = {
+                    "detail": "Insufficient balance"
+                }
+                return Response(context, status=status.HTTP_400_BAD_REQUEST)
+        data  = {
+            "source": "balance",
+            "amount": str(amount * 100),
+            "recipient": transaction.transfer_receipient_code,
+            "reason": "Cleaning Service",
+            "reference": f"CS{user.user_id}"
+        }
+        response = requests.post(url, headers=headers, json=data)
+        if response.status_code == 200:
+            data = response.json()
+            context = {
+                "detail": "Withdrawal successful",
+                "data": data
+            }
+            transaction.balance -= amount
+            transaction.save()
+            return Response(context, status=status.HTTP_200_OK)
+        else:
+            return Response(response.text, status=response.status_code)
+        
+
+class Dashboard(viewsets.ViewSet):
+    
+    def get_transaction(self, request):
+        user = get_user_from_jwttoken(user)
+        transaction = Transaction.objects.get(user=user)
+        if transaction:
+            serializers = TransactionSerializer(transaction)
+            return Response(serializers.data, status=status.HTTP_200_OK)
+        else:
+            context = {
+                "detail": "No transaction found"
+            }
+            return Response(context, status=status.HTTP_404_NOT_FOUND)
+        

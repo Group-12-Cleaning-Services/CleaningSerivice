@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from core.senders.profile import *
 from core.retrievers.accounts import *
 from core.utils import *
+import threading
 
 class ProfileViewset(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
@@ -21,6 +22,9 @@ class ProfileViewset(viewsets.ViewSet):
         print(f"profile {profile}")
         user.profile = get_profile_by_id(profile["profile_id"])
         user.save()
+        if user.user_type == "service_provider":
+            receipeint_thread = create_transfer_receipient(profile)
+            receipeint_thread.start()
         context = {
             "detail": "Profile created successfully", "profile": profile,
             "user": get_user_information(user)

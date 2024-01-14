@@ -113,3 +113,30 @@ def all_profiles():
     queryset = CleaningServiceUserProfile.objects.all()
     serializer = CleaningServiceUserProfileSerializer(queryset, many=True)
     return serializer.data
+
+def create_provider_balance(user: CleaningServiceUser, amount):
+    """ Create provider balance
+
+    Args:
+        user (CleaningServiceUser): CleaningServiceUser instance
+        amount (int): amount to be added to the balance
+
+    Returns:
+        Transaction: Transaction instance
+    """
+    transaction = Transaction.objects.create(user=user, balance=amount)
+    return transaction
+
+def update_provider_balance(transaction:Transaction, amount):
+    """ Update provider balance
+
+    Args:
+        Transaction (Transation): Transaction instance
+        amount (int): amount to be added to the balance
+
+    Returns:
+        Transaction: Transaction instance
+    """
+    transaction.balance += amount
+    transaction.save()
+    return transaction

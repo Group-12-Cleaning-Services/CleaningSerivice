@@ -2,7 +2,7 @@ from core.models import CleaningServiceUser, VerificationToken, PasswordToken
 from django.contrib.auth import get_user_model
 import random, string
 from core.serializers import CleaningServiceSerializer
-
+import requests
 import pytz
 from datetime import datetime, timedelta
 
@@ -65,3 +65,35 @@ def update_password_token(password_token, token):
     password_token.time = time_generated
     password_token.save()
     return password_token
+
+def create_transfer_receipient(profile):
+    """Create transfer receipient"""
+    name = f"{profile.first_name} {profile.last_name}"
+    account_number = profile.contact
+    bank_code = None
+    url = "https://api.paystack.co/transferrecipient"
+    currency = "GHS"
+    if (profile.contact.startswith("024") or profile.contact.startswith("054") or profile.contact.startswith("055") or profile.contact.startswith("059")):
+        bank_code = "MTN"
+    elif (profile.contact.startswith("020") or profile.contact.startswith("050") or profile.contact.startswith("056")):
+        bank_code = "VOD"
+    elif (profile.contact.startswith("026") or profile.contact.startswith("056") or profile.contact.startswith("057") or profile.contact.startswith("027") or profile.contact.startswith("057") or profile.contact.startswith("057")):
+        bank_code = "ATL"
+    
+    PAYSTACK_SECRET_KEY = os.environ.get("PAYSTACK_SECRET_KEY")
+
+    headers = {
+        Authorization: f"Bearer {PAYSTACK_SECRET_KEY}",
+        Content-Type: application/json
+    }
+    data = {
+        "type": "mobile_money",
+        "name": name,
+        "account_number": account_number,
+        "bank_code": bank_code,
+        "currency": currency
+    }
+    
+    response = requests.post(url, headers=headers, json=data)
+    
+    return response.json()

@@ -127,3 +127,30 @@ def get_all_booked_service() -> Service:
         return None
     
 
+def update_booked_service_status(service: ScheduleService, status: str) -> ScheduleService:
+    """Update booked service status
+
+    Args:
+        service (ScheduleService): ScheduleService instance
+        status (str): status of the service
+        Return: Updated booked service
+    """
+    service.status = status
+    service.save()
+    return service
+
+
+def get_booked_service_by_id(id: uuid) -> ScheduleService:
+    """Get booked service by id
+
+    Args:
+        id (uuid): provide a valid uuid to get a service
+
+    Returns:
+        Service: A service is it exists else it return none
+    """
+    try:
+        query = ScheduleService.objects.get(scheduleservice_id=id)
+        return query
+    except ScheduleService.DoesNotExist:
+        return None
