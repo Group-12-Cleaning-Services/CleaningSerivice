@@ -149,9 +149,8 @@ class Withdraw(viewsets.ViewSet):
         #     data = response.json()
         context = {
                 "detail": "Withdrawal successful",
-                "data": data
             }
-        transaction.balance -= amount
+        transaction.balance -= int(amount)
         transaction.save()
         return Response(context, status=status.HTTP_200_OK)
         

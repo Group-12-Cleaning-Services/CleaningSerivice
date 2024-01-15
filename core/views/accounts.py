@@ -136,7 +136,7 @@ class SignIn(viewsets.ViewSet):
         password = request.data.get("password")
 
         if not email or not password:
-            raise AuthenticationFailed("Missing required login credential")
+            return Response("Incorrect login credentials provided", status=status.HTTP_401_UNAUTHORIZED)
 
         user = get_user_by_email(email)
 
@@ -155,4 +155,4 @@ class SignIn(viewsets.ViewSet):
             response = Response(context, status=status.HTTP_200_OK)
             return response
         else:
-            raise AuthenticationFailed("Incorrect login credentials provided")
+            return Response("Incorrect login credentials provided", status=status.HTTP_401_UNAUTHORIZED)
