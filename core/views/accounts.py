@@ -99,17 +99,22 @@ class AccountViewset(viewsets.ViewSet):
                 context = {
                     "detail": "Your email has been verified successfully",
                     "user": get_user_information(account),
+                    "status": True,
                 }
 
                 return Response(context, status=status.HTTP_200_OK)
 
             else:
                 otp_detail.delete()
-                context = {"detail": "This otp has expired Request a new one"}
+                context = {"detail": "This otp has expired Request a new one",
+                           "status": False}
                 return Response(context, status=status.HTTP_200_OK)
         print(otp_detail.token)
         print(otp)
-        context = {"detail": "The otp you have provided is invalid"}
+        context = {
+                    "detail": "The otp you have provided is invalid",
+                   "status": False
+                   }
         return Response(context, status=status.HTTP_400_BAD_REQUEST)
 
 
