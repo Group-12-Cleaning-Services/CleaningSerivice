@@ -66,9 +66,12 @@ def get_profile_by_user_id(user_id):
     """Get profile by user id"""
     try:
         user = get_user_by_id(user_id)
-        profile_id = user.profile.profile_id
-        return CleaningServiceUserProfile.objects.get(profile_id=profile_id)
-    except CleaningServiceUserProfile.DoesNotExist:
+        if user.profile:
+            profile_id = user.profile.profile_id
+            return CleaningServiceUserProfile.objects.get(profile_id=profile_id)
+        else:
+            return None
+    except:
         return None
 
 def get_verification_token(email):
