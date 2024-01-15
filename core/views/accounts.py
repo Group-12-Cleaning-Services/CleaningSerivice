@@ -104,6 +104,8 @@ class AccountViewset(viewsets.ViewSet):
                 otp_detail.delete()
                 context = {"detail": "This otp has expired Request a new one"}
                 return Response(context, status=status.HTTP_200_OK)
+        print(otp_detail.token)
+        print(otp)
         context = {"detail": "The otp you have provided is invalid"}
         return Response(context, status=status.HTTP_400_BAD_REQUEST)
 
