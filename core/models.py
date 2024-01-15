@@ -31,7 +31,7 @@ class CleaningServiceUserProfile(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     contact = PhoneField(null=True, blank=True)
-    profile_image = models.ImageField(upload_to='profile_images', blank=True, null=True)
+    profile_image = models.ImageField(upload_to='images/', blank=True, null=True)
     time_created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     
     def __str__(self):
@@ -73,7 +73,7 @@ class CleaningServiceUser(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     verified = models.BooleanField(default=False)
     organization_name = models.CharField(max_length=255, null=True, blank=True)
-    organization_logo = models.ImageField(upload_to='organization_logo', blank=True, null=True)
+    organization_logo = models.ImageField(upload_to='images', blank=True, null=True)
     USERNAME_FIELD = 'email'
     objects = CleaningServiceBaseUser()
     
@@ -113,7 +113,7 @@ class Service(models.Model):
     description = models.CharField(max_length=255)
     category = models.CharField(max_length=50)
     user = models.ForeignKey(CleaningServiceUser, on_delete=models.CASCADE)
-    thumnail = models.ImageField(upload_to="thumnail_images", blank=True, null=True)
+    thumnail = models.ImageField(upload_to="images", blank=True, null=True)
     price = models.DecimalField(decimal_places=2, max_digits=10)
     created_at = models.DateField(auto_now_add=True)
     def __str__(self):

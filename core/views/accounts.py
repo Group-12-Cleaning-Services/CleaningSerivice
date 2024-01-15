@@ -80,7 +80,7 @@ class AccountViewset(viewsets.ViewSet):
             return Response(context, status=status.HTTP_404_NOT_FOUND)
         if account.verified:
             print(account.verified)
-            context = {"detail": "Your account has already been verified"}
+            context = {"detail": "Your account has already been verified", "status": True}
             return Response(context, status=status.HTTP_208_ALREADY_REPORTED)
 
         otp_detail = VerificationToken.objects.get(email=email)
