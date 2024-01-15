@@ -10,6 +10,9 @@ import pytz
 UTC = pytz.UTC
 from rest_framework_simplejwt.tokens import RefreshToken
 from core.serializers import CleaningServiceSerializer
+from django.http import JsonResponse
+
+
 class AccountViewset(viewsets.ViewSet):
     """Accounts viewset"""
 
@@ -74,17 +77,17 @@ class AccountViewset(viewsets.ViewSet):
         account = get_user_by_email(email)
         if not account:
             context = {"detail": "No account associated with this email"}
-            return Response(context, status=status.HTTP_404_NOT_FOUND)
+            return JsonResponse(context, status=status.HTTP_404_NOT_FOUND)
         if account.verified:
             print(account.verified)
             context = {"detail": "Your account has already been verified"}
-            return Response(context, status=status.HTTP_208_ALREADY_REPORTED)
+            return JsonResponse(context, status=status.HTTP_208_ALREADY_REPORTED)
 
         otp_detail = VerificationToken.objects.get(email=email)
         if str(otp).strip() == str(otp_detail.token).strip():
-            if UTC.localize(datetime.now()) < otp_detail.time + timedelta(
-                minutes=10
-            ):
+            print(f"Current time: {UTC.localize(datetime.now())}")
+            print(f"Token time + 10 minutes: {otp_detail.time + timedelta(minutes=10)}")
+            if UTC.localize(datetime.now()) < otp_detail.time + timedelta(minutes=10):
                 account.verified = True
                 account.save()
                 otp_detail.delete()
@@ -98,16 +101,16 @@ class AccountViewset(viewsets.ViewSet):
                     "user": get_user_information(account),
                 }
 
-                return Response(context, status=status.HTTP_200_OK)
+                return JsonResponse(context, status=status.HTTP_200_OK)
 
             else:
                 otp_detail.delete()
                 context = {"detail": "This otp has expired Request a new one"}
-                return Response(context, status=status.HTTP_200_OK)
+                return JsonResponse(context, status=status.HTTP_200_OK)
         print(otp_detail.token)
         print(otp)
         context = {"detail": "The otp you have provided is invalid"}
-        return Response(context, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse(context, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SignIn(viewsets.ViewSet):
