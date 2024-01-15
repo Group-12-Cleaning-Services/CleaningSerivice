@@ -82,10 +82,11 @@ class PaymentViewset(viewsets.ViewSet):
                 service = get_service_by_id(service_id)
                 schedule_service = book_service(service=service, user=user, time=service_time, address=address, date=date)
                 Transaction.objects.create(user=user, balance=service.price)
-                service_transaction = Transaction.objects.get(user=service.user)
-                if service_transaction:
+                
+                try:
+                    service_transaction = Transaction.objects.get(user=service.user)
                     update_provider_balance(service_transaction, service.price)
-                else:
+                except:
                     create_provider_balance(service.user, service.price)
                 context = {
                     "detail": "Service booked successfully",
