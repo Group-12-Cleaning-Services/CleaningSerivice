@@ -77,11 +77,11 @@ class AccountViewset(viewsets.ViewSet):
         account = get_user_by_email(email)
         if not account:
             context = {"detail": "No account associated with this email"}
-            return JsonResponse(context, status=status.HTTP_404_NOT_FOUND)
+            return Response(context, status=status.HTTP_404_NOT_FOUND)
         if account.verified:
             print(account.verified)
             context = {"detail": "Your account has already been verified"}
-            return JsonResponse(context, status=status.HTTP_208_ALREADY_REPORTED)
+            return Response(context, status=status.HTTP_208_ALREADY_REPORTED)
 
         otp_detail = VerificationToken.objects.get(email=email)
         if str(otp).strip() == str(otp_detail.token).strip():
@@ -101,16 +101,16 @@ class AccountViewset(viewsets.ViewSet):
                     "user": get_user_information(account),
                 }
 
-                return JsonResponse(context, status=status.HTTP_200_OK)
+                return Response(context, status=status.HTTP_200_OK)
 
             else:
                 otp_detail.delete()
                 context = {"detail": "This otp has expired Request a new one"}
-                return JsonResponse(context, status=status.HTTP_200_OK)
+                return Response(context, status=status.HTTP_200_OK)
         print(otp_detail.token)
         print(otp)
         context = {"detail": "The otp you have provided is invalid"}
-        return JsonResponse(context, status=status.HTTP_400_BAD_REQUEST)
+        return Response(context, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SignIn(viewsets.ViewSet):
