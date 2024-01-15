@@ -147,10 +147,9 @@ class SignIn(viewsets.ViewSet):
         if user.check_password(password) and user.is_active:
             token = RefreshToken.for_user(user)
             user_data = get_user_information(email)
-            print(user_data)
             context = {
                 "detail": "Sign in successful",
-                "user": str(user_data),
+                "user": user_data,
                 "token": {"access": str(token.access_token), "refresh": str(token)},
             }
             response = Response(context, status=status.HTTP_200_OK)
