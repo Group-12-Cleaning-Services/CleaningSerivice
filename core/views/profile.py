@@ -28,7 +28,6 @@ class ProfileViewset(viewsets.ViewSet):
                 Transaction.objects.create(user=user, transfer_receipient_code=receipeint["data"]["recipient_code"])
         context = {
             "detail": "Profile created successfully", "profile": profile,
-            "user": get_user_information(user)
             }
         return Response(context, status=status.HTTP_201_CREATED)
 
