@@ -159,12 +159,14 @@ class Withdraw(viewsets.ViewSet):
         
 
 class Dashboard(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
     
     def get_transaction(self, request):
-        user = get_user_from_jwttoken(user)
-        transaction = Transaction.objects.get(user=user)
+        
+        user = get_user_from_jwttoken(request)
+        transaction = Transaction.objects.filter(user=user)
         if transaction:
-            serializers = TransactionSerializer(transaction)
+            serializers = TransactionSerializer(transaction, many=True)
             return Response(serializers.data, status=status.HTTP_200_OK)
         else:
             context = {

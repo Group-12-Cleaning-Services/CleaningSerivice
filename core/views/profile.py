@@ -23,8 +23,9 @@ class ProfileViewset(viewsets.ViewSet):
         user.profile = get_profile_by_id(profile["profile_id"])
         user.save()
         if user.user_type == "service_provider":
-            receipeint_thread = create_transfer_receipient(profile)
-            receipeint_thread.start()
+            receipeint = create_transfer_receipient(user.profile)
+            if receipeint:
+                Transaction.objects.create(user=user, transfer_receipient_code=receipeint["data"]["recipient_code"])
         context = {
             "detail": "Profile created successfully", "profile": profile,
             "user": get_user_information(user)

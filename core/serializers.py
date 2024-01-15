@@ -72,3 +72,7 @@ class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = "__all__"
+        extra_kwargs = {
+            'balance': {
+            'min_value':0.00,
+        }}
