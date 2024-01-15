@@ -47,7 +47,9 @@ class ProfileViewset(viewsets.ViewSet):
             }
             return Response(context, status=status.HTTP_404_NOT_FOUND)
         profile = update_profile(request.data, profile)
-        context = {"detail": "Profile updated successfully", "profile": profile}
+        context = {
+            "detail": "Profile updated successfully", "profile": profile
+            }
         return Response(context, status=status.HTTP_200_OK)
 
 
