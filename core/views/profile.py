@@ -66,9 +66,10 @@ class ProfileViewset(viewsets.ViewSet):
         profile = get_profile_by_user_id(user_id=user.user_id)
         if not profile:
             context = {
-                "detail": "profile does not exis"
+                "detail": "profile does not exists", 
+                "profile": None
             }
-            return Response(context, status=status.HTTP_404_NOT_FOUND)
+            return Response(context, status=status.HTTP_200_OK)
         context = {
             "profile": send_profile_information(profile)
         }
