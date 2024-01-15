@@ -4,7 +4,7 @@ from core.views.profile import ProfileViewset
 from core.views.services import ServiceViewset
 from core.views.notification import NotificationViewset
 from core.views.reset_password import PasswordResetViewset
-from core.views.transactions import PaymentViewset, Dashboard
+from core.views.transactions import PaymentViewset, Dashboard, Withdraw
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework_simplejwt.views import (
@@ -45,6 +45,7 @@ urlpatterns = [
     path('service/update-booked-service/<uuid:id>/', ServiceViewset.as_view({'post':'update_booked_service'})),
     #Transaction
     path('transaction/all/', Dashboard.as_view({'get': 'get_transaction'})),
+    path('transaction/transfer/', Withdraw.as_view({'post': 'initialize_transfer'})),
     ##Notification
     path('notification/all/', NotificationViewset.as_view({'get': 'list'})),
 

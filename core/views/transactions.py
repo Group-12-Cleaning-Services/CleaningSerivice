@@ -102,7 +102,6 @@ class PaymentViewset(viewsets.ViewSet):
         
 
 class Withdraw(viewsets.ViewSet):
-    
     permission_classes = [IsAuthenticated]
     
     def initialize_transfer(self, request):
@@ -116,7 +115,7 @@ class Withdraw(viewsets.ViewSet):
                 "reason": "Holiday Flexing" 
                 }'
             -X POST
-    """
+        """
         amount = request.data.get("amount")
         user = get_user_from_jwttoken(request)
         url = "https://api.paystack.co/transfer"
@@ -132,30 +131,29 @@ class Withdraw(viewsets.ViewSet):
         }
         transaction = Transaction.objects.get(user=user)
         if transaction:
-            if transaction.balance < amount:
+            print(transaction.balance)
+            if transaction.balance < int(amount):
                 context = {
                     "detail": "Insufficient balance"
                 }
                 return Response(context, status=status.HTTP_400_BAD_REQUEST)
-        data  = {
-            "source": "balance",
-            "amount": str(amount * 100),
-            "recipient": transaction.transfer_receipient_code,
-            "reason": "Cleaning Service",
-            "reference": f"CS{user.user_id}"
-        }
-        response = requests.post(url, headers=headers, json=data)
-        if response.status_code == 200:
-            data = response.json()
-            context = {
+        # data  = {
+        #     "source": "balance",
+        #     "amount": str(amount * 100),
+        #     "recipient": transaction.transfer_receipient_code,
+        #     "reason": "Cleaning Service",
+        #     "reference": f"CS{user.user_id}"
+        # }
+        # response = requests.post(url, headers=headers, json=data)
+        # if response.status_code == 200:
+        #     data = response.json()
+        context = {
                 "detail": "Withdrawal successful",
                 "data": data
             }
-            transaction.balance -= amount
-            transaction.save()
-            return Response(context, status=status.HTTP_200_OK)
-        else:
-            return Response(response.text, status=response.status_code)
+        transaction.balance -= amount
+        transaction.save()
+        return Response(context, status=status.HTTP_200_OK)
         
 
 class Dashboard(viewsets.ViewSet):

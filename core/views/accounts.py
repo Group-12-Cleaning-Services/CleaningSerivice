@@ -81,7 +81,7 @@ class AccountViewset(viewsets.ViewSet):
             return Response(context, status=status.HTTP_208_ALREADY_REPORTED)
 
         otp_detail = VerificationToken.objects.get(email=email)
-        if otp == otp_detail.token:
+        if str(otp).strip() == str(otp_detail.token).strip():
             if UTC.localize(datetime.now()) < otp_detail.time + timedelta(
                 minutes=10
             ):
@@ -100,11 +100,10 @@ class AccountViewset(viewsets.ViewSet):
 
                 return Response(context, status=status.HTTP_200_OK)
 
-        else:
-            otp_detail.delete()
-            context = {"detail": "This otp has expired Request a new one"}
-            return Response(context, status=status.HTTP_200_OK)
-
+            else:
+                otp_detail.delete()
+                context = {"detail": "This otp has expired Request a new one"}
+                return Response(context, status=status.HTTP_200_OK)
         context = {"detail": "The otp you have provided is invalid"}
         return Response(context, status=status.HTTP_400_BAD_REQUEST)
 

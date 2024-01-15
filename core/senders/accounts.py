@@ -38,7 +38,6 @@ def generate_token(otp_length):
 def create_verification_token(email, token):
     """Create verification token"""
     time_generated = UTC.localize(datetime.now())
-    print(f"time: {time_generated}")
     verification_token = VerificationToken.objects.create(email=email, token=token, time=time_generated)
     return verification_token
 
