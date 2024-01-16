@@ -390,6 +390,5 @@ class ServiceViewset(viewsets.ViewSet):
         schedule_service = update_booked_service_status(schedule_service, status=service_status)
         context = {
             "detail": "Schedule service updated successfully",
-            "schedule_service": schedule_service
         }
         return Response(context, status=status.HTTP_200_OK)
