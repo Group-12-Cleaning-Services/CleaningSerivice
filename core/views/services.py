@@ -38,7 +38,7 @@ class ServiceViewset(viewsets.ViewSet):
         return Response(context, status=status.HTTP_200_OK)
     
     
-    def list_booked_service_by_customer(self, request, id):
+    def list_booked_service_of_customer(self, request):
         """View for getting all booked service by a customer
 
         Args:

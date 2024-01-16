@@ -106,17 +106,6 @@ class Withdraw(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
     
     def initialize_transfer(self, request):
-        """curl https://api.paystack.co/transfer
-            -H "Authorization: Bearer YOUR_SECRET_KEY"
-            -H "Content-Type: application/json"
-            -d '{ "source": "balance", 
-                "amount": "37800",
-                "reference": "your-unique-reference", 
-                "recipient": "RCP_t0ya41mp35flk40", 
-                "reason": "Holiday Flexing" 
-                }'
-            -X POST
-        """
         amount = request.data.get("amount")
         user = get_user_from_jwttoken(request)
         url = "https://api.paystack.co/transfer"
@@ -138,16 +127,6 @@ class Withdraw(viewsets.ViewSet):
                     "detail": "Insufficient balance"
                 }
                 return Response(context, status=status.HTTP_400_BAD_REQUEST)
-        # data  = {
-        #     "source": "balance",
-        #     "amount": str(amount * 100),
-        #     "recipient": transaction.transfer_receipient_code,
-        #     "reason": "Cleaning Service",
-        #     "reference": f"CS{user.user_id}"
-        # }
-        # response = requests.post(url, headers=headers, json=data)
-        # if response.status_code == 200:
-        #     data = response.json()
         context = {
                 "detail": "Withdrawal successful",
             }
