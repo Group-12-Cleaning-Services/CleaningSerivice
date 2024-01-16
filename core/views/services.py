@@ -88,7 +88,7 @@ class ServiceViewset(viewsets.ViewSet):
             "price":data["service"]["price"],
             "title": data["service"]["title"],
             "category": data["service"]["category"]
-        } for data in send_booked_service_by_customer(user)]
+        } for data in get_booked_service_by_provider(user)]
 
         context = {
             "detail": "All booked service by a provider",

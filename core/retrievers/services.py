@@ -1,5 +1,5 @@
 from core.models import *
-from core.serializers import ServiceSerializer
+from core.serializers import ServiceSerializer, ScheduleServiceSerializer
 
 def get_service_by_id(id: uuid) -> Service:
     """Get service by id
@@ -97,7 +97,7 @@ def get_booked_service_by_provider(provider: CleaningServiceUser) -> Service:
     """
     try:
         query_set = ScheduleService.objects.filter(service__user=provider)
-        return query_set
+        return ScheduleServiceSerializer(query_set, many=True).data
     except ScheduleService.DoesNotExist:
         return None
     
