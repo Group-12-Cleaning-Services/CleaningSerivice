@@ -50,9 +50,18 @@ class ServiceViewset(viewsets.ViewSet):
                 "detail": "You are not a customer"
             }
             return Response(context, status=status.HTTP_403_FORBIDDEN)
+        send_data = [{
+            "id": data["scheduleservice_id"],
+            "date": data["date"],
+            "time": data["time"],
+            "status": data["status"],
+            "organization_name": data["service"]["user"]["organization_name"],
+            "price":data["service"]["price"]
+        } for data in send_booked_service_by_customer(user)]
+
         context = {
             "detail": "All booked service by a customer",
-            "serices": send_booked_service_by_customer(user)
+            "services": send_data
         }
         return Response(context, status=status.HTTP_200_OK)
     

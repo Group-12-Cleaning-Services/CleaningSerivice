@@ -22,7 +22,7 @@ USER_TYPE = [
 SCHEDULE_STATUS = [
     ("booked", "Booked"),
     ("completed", "Completed"),
-    ("deleted", "Deleted")
+    ("ongoing", "Ongoing"),
 ]
 
 class CleaningServiceUserProfile(models.Model):
