@@ -15,7 +15,9 @@ class NotificationViewset(viewsets.ViewSet):
         user = get_user_from_jwttoken(request)
 
         send_data = [
-            {data["message"] for data in get_notification_by_user(user)}
+            {
+                "message": data["message"]
+            } for data in get_notification_by_user(user)
         ]
         context = {
             "detail": "All Notifications",
