@@ -13,8 +13,12 @@ class NotificationViewset(viewsets.ViewSet):
             request (http): get request
         """
         user = get_user_from_jwttoken(request)
+
+        send_data = [
+            {data["message"] for data in get_notification_by_user(user)}
+        ]
         context = {
             "detail": "All Notifications",
-            "notifications": get_notification_by_user(user)
+            "notifications": send_data,
         }
         return Response(context, status=status.HTTP_200_OK)
