@@ -375,7 +375,7 @@ class ServiceViewset(viewsets.ViewSet):
             id (uuid): service id
         """
         user = get_user_from_jwttoken(request)  
-        status = request.data.get("status")
+        service_status = request.data.get("status")
         if user.user_type != "service_provider":
             context = {
                 "detail": "You are not a provider"
@@ -387,7 +387,7 @@ class ServiceViewset(viewsets.ViewSet):
                 "detail": "Schedule service not found"
             }
             return Response(context, status=status.HTTP_404_NOT_FOUND)
-        schedule_service = update_booked_service_status(schedule_service, status=status)
+        schedule_service = update_booked_service_status(schedule_service, status=service_status)
         context = {
             "detail": "Schedule service updated successfully",
             "schedule_service": schedule_service
