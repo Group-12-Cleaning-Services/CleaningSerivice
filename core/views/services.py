@@ -56,7 +56,9 @@ class ServiceViewset(viewsets.ViewSet):
             "time": data["time"],
             "status": data["status"],
             "organization_name": data["service"]["user"]["organization_name"],
-            "price":data["service"]["price"]
+            "price":data["service"]["price"],
+            "title": data["service"]["title"],
+            "category": data["service"]["category"]
         } for data in send_booked_service_by_customer(user)]
 
         context = {
