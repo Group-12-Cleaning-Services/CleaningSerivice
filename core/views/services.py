@@ -306,11 +306,11 @@ class ServiceViewset(viewsets.ViewSet):
             id (uuid): service id
         """
         user = get_user_from_jwttoken(request)
-        if user.user_type != "customer":
-            context = {
-                "detail": "You are not a customer"
-            }
-            return Response(context, status=status.HTTP_403_FORBIDDEN)
+        # if user:
+        #     context = {
+        #         "detail": "You are not a customer"
+        #     }
+        #     return Response(context, status=status.HTTP_403_FORBIDDEN)
         schedule_service = get_booked_service_by_id(id)
         if not schedule_service:
             context = {

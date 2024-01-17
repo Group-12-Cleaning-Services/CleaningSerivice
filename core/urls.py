@@ -43,10 +43,12 @@ urlpatterns = [
     path('service/list-provider-services/', ServiceViewset.as_view({'get':'list_service_provider_services'})),
     path('service/list-service-provider-booked-services/', ServiceViewset.as_view({'get':'list_booked_service_of_provider'})),
     path('service/update-booked-service/<uuid:id>/', ServiceViewset.as_view({'post':'update_booked_service'})),
+    path('service/delete-booked-service/<uuid:id>/', ServiceViewset.as_view({'delete':'cancel_booked_service'})),
     #Transaction
     path('transaction/all/', Dashboard.as_view({'get': 'get_transaction'})),
     path('transaction/transfer/', Withdraw.as_view({'post': 'initialize_transfer'})),
     ##Notification
     path('notification/all/', NotificationViewset.as_view({'get': 'list'})),
+    path('notification/delete/', NotificationViewset.as_view({'delete': 'delete'})),
 
 ]
